@@ -1,0 +1,44 @@
+model_config: "base"
+custom_config: null
+
+# Data
+train_data: "data/multimodal_train.jsonl"
+val_data: "data/multimodal_val.jsonl"
+tokenizer_path: "tokenizer/tokenizer.json"
+max_seq_len: 4096
+batch_size: 8
+micro_batch_size: 2
+
+# Training
+lr: 1e-4
+min_lr: 1e-5
+weight_decay: 0.1
+beta1: 0.9
+beta2: 0.95
+grad_clip: 1.0
+warmup_steps: 500
+max_steps: 50000
+save_every: 2500
+eval_every: 500
+log_every: 10
+
+# Mixed precision
+dtype: "bf16"
+
+# Multimodal
+use_vision: true
+use_audio: true
+image_size: 336
+audio_mel_bins: 128
+
+# Swarm
+swarm_agents: 1
+swarm_mode: false
+
+# Output
+out_dir: "checkpoints/sia_base_multimodal"
+wandb_project: "sia"
+wandb_run: "base-multimodal-ft"
+
+# Resume
+resume_from: ""

@@ -1,0 +1,44 @@
+model_config: "nano"
+custom_config: null
+
+# Data
+train_data: "data/train.bin"
+val_data: "data/val.bin"
+tokenizer_path: "tokenizer/tokenizer.json"
+max_seq_len: 2048
+batch_size: 16
+micro_batch_size: 4
+
+# Training
+lr: 3e-4
+min_lr: 3e-5
+weight_decay: 0.1
+beta1: 0.9
+beta2: 0.95
+grad_clip: 1.0
+warmup_steps: 1000
+max_steps: 100000
+save_every: 5000
+eval_every: 1000
+log_every: 10
+
+# Mixed precision
+dtype: "bf16"
+
+# Multimodal
+use_vision: false
+use_audio: false
+image_size: 336
+audio_mel_bins: 128
+
+# Swarm
+swarm_agents: 1
+swarm_mode: false
+
+# Output
+out_dir: "checkpoints/sia_nano"
+wandb_project: "sia"
+wandb_run: "nano-pretrain"
+
+# Resume
+resume_from: ""
