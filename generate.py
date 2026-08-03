@@ -28,7 +28,7 @@ def load_image(path: str, size: int = 336) -> torch.Tensor:
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--checkpoint", required=True)
+    p.add_argument("--checkpoint", default="checkpoints/sia_nano_demo/sia.pt", help="Path to sia.pt")  # ponytail: single ckpt today
     p.add_argument("--config", default="nano", choices=["nano", "small", "base", "large", "xl"])
     p.add_argument("--tokenizer", default="tokenizer/tokenizer.json")
     p.add_argument("--prompt", default="")
