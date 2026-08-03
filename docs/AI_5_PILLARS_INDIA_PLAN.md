@@ -2,7 +2,18 @@
 
 **Source video:** "OpenAI's TRILLION Dollar Comeback : How Altman Turned a $27B Loss Into an EMPIRE?" — Think School (youtu.be/opLMb_oYfMI)
 **Date:** 03 Aug 2026
-**Note:** Video transcript blocked from VPS (YouTube datacenter IP ban). Analysis grounded in the video's empire thesis (energy → silicon → data centers → models → apps) + our pillar mapping + verified India facts below.
+
+## What the video actually says (transcript summary)
+
+OpenAI's core problem = **inference cost** (training is one-time; inference scales with every user). They're stuck in the **landlord trap** — renting Microsoft DCs + NVIDIA chips, so margins stay thin. 4 strategic moves in 90 days:
+1. **GPT-5.6 Sol** — matches rival performance at a fraction of cost
+2. **Codex** — primary dev tool to drive deeper engagement
+3. **ChatGPT Work** — unified email/docs/code workspace for lock-in
+4. **Jalapeño chip** — custom inference-only AI chip with Broadcom, ~50% inference cost cut
+
+Road ahead = **Jevons paradox**: as AI gets cheaper, usage explodes — so cost-cutting is a treadmill, not a destination.
+
+**Mapping to our 5 pillars:** the video's lesson is *inference cost is the moat*. Our pillars answer it India-style: cheaper models (SIA-edge quantised), custom silicon (our RISC-V edge ASIC = our Jalapeño), escape the landlord trap (rent Indian compute now → own DC later), and apps that fund it all (ChatGPT Work analog = revenue products). Jevons paradox is good news for us: every 10x we cut inference cost, our addressable market (India's price-sensitive market) grows faster than the cost saved.
 
 ---
 
