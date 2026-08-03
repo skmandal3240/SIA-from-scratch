@@ -1,73 +1,44 @@
-# SIA — Unified Multimodal Foundation Model
+# SIA — From-Scratch Multimodal AI Framework
 
-One model. Text, Vision, Audio, Code, Tools. Generation: Image, Video, Audio.
+India-first, self-funded multimodal transformer built from scratch: tokenizer → attention → training → tools → audio/vision/code → generation.
 
-## Architecture
+Status: **WORKING** (trained nano model, all demos pass). Routes to the AI 5-Pillar plan (`docs/AI_5_PILLARS_INDIA_PLAN.md`) — models pillar (2), revenue apps (1), compute (3), silicon (4), energy (5).
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      SIA Backbone                            │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐     │
-│  │  Text    │  │  Vision  │  │  Audio   │  │  Code    │     │
-│  │  Tokens  │  │  Patches │  │  Tokens  │  │  Tokens  │     │
-│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘     │
-│       │             │             │             │            │
-│       ▼             ▼             ▼             ▼            │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │           Shared Transformer (RoPE, SwiGLU, RMSNorm) │    │
-│  │     Cross-attention between modalities at layers      │    │
-│  └─────────────────────────────────────────────────────┘    │
-│       │             │             │             │            │
-│       ▼             ▼             ▼             ▼            │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐     │
-│  │  Text    │  │  Image   │  │  Video   │  │  Audio   │     │
-│  │  Head    │  │  Diffusion│  │ Diffusion │  │ Diffusion│     │
-│  └──────────┘  └──────────┘  └──────────┘  └──────────┘     │
-│                        ▲                      ▲              │
-│              ┌─────────┴─────────┐  ┌────────┴────────┐      │
-│              │   Tool Head       │  │  Code Head      │      │
-│              └───────────────────┘  └─────────────────┘      │
-└─────────────────────────────────────────────────────────────┘
-```
+## What's here
 
-## Configs
+| File | Role |
+|------|------|
+| `sia.py` | Full architecture: SIAConfig (nano→xl), RMSNorm, SwiGLU, RoPE, GQA attention, cross-attention, Vision/Audio/Code encoders, diffusion heads (image/video/audio), ToolHead, AgentCommunication, weight-tying, generate_text/image/audio |
+| `tokenizer.py` | Unified BPE tokenizer (tokenizers lib) with multimodal special tokens; HF `tokenizer.json` export |
+| `prepare_data.py` | Corpus → trained tokenizer (vocab 8192) → `data/train.bin` / `data/val.bin` (numpy uint16) |
+| `train.py` | CPU-safe training loop (Accelerate, fp32 fallback, gradient accumulation, cosine LR, eval, checkpointing) |
+| `generate.py` | Generation CLI: text / code / image / audio |
+| `tools.py` | Tool registry + agent loop: `calc`, `now`, `file_read`, `file_write`, `list_files` via `[[tool:name(args)]]` |
+| `modalities.py` | Pure-numpy audio DSP: wav I/O, mel spectrogram, Griffin-Lim, synth music, `analyze_audio` ("listening") |
+| `demos.py` | 9-demo gauntlet → `outputs/` (text, code, vision, audio-listen, audio-gen, image-gen, video GIF, tools, int8 quantize) |
+| `configs/sia_nano_demo.yaml` | Nano training config (CPU): 256 dim, 6 layers, 500 steps |
+| `outputs/goc/` | GoC collateral: 5-pillar one-pager, grants tracker, email drafts, PPTX deck |
+| `cron/cron_digest.py` | Daily 5-pillar digest (installed as `~/.hermes/scripts/sia_digest.py` → Telegram) |
 
-| Model | Dim | Layers | Heads | Params | Use Case |
-|-------|-----|--------|-------|--------|----------|
-| SIA-Nano | 256 | 6 | 4 | ~15M | Edge/Phone |
-| SIA-Small | 512 | 12 | 8 | ~100M | Laptop/Colab |
-| **SIA-Base** | **768** | **24** | **12** | **~500M** | **Single GPU** |
-| SIA-Large | 1024 | 32 | 16 | ~1.5B | Multi-GPU |
-| SIA-XL | 1536 | 40 | 24 | ~4B | Cluster |
-
-## Quick Start
+## Quickstart
 
 ```bash
-pip install -r requirements.txt
-
-# Train text-only (pretrain)
-python train.py --config configs/sia_base_text.yaml
-
-# Train multimodal (fine-tune)
-python train.py --config configs/sia_base_multimodal.yaml
-
-# Generate
-python generate.py --model checkpoints/sia_base.pt --prompt "A photo of a cat" --modality image
+.venv/bin/python prepare_data.py            # build tokenizer + .bin data
+.venv/bin/python train.py --config configs/sia_nano_demo.yaml   # ~4 min CPU, 500 steps
+.venv/bin/python demos.py                   # run all 9 demos -> outputs/
+.venv/bin/python generate.py --prompt "To be, or not to be" --max-new 60
 ```
 
-## Modalities
+## Verified
 
-| Input | Output | Status |
-|-------|--------|--------|
-| Text | Text | ✅ |
-| Image | Text (caption/VQA) | ✅ |
-| Audio | Text (ASR/understanding) | ✅ |
-| Code | Code | ✅ |
-| Text | Image (diffusion) | ✅ |
-| Text | Video (diffusion) | ✅ |
-| Text | Audio (diffusion) | ✅ |
-| Text | Tool calls | ✅ |
+- Ad-hoc verify (5 checks: tokenizer roundtrip, forward+generate, audio mel+Griffin-Lim, tools, quantize smoke) — ALL PASS
+- Training: 500 steps, loss 5.47 → 5.06, val 6.34, checkpoint `checkpoints/sia_nano_demo/sia.pt`
+- Demos 1–9 all pass on trained weights; int8 dynamic quantize: 0.12s vs 0.16s fp32 per 20 tokens
 
-## License
+## Roadmap (Pillar 2)
 
-Apache 2.0 — train, sell, ship.
+text ✅ → vision (encoder done, VAE decoders next) → audio listen ✅ / gen (diffusion head, VAE next) → video frames ✅ → code ✅ → SIA-edge INT4/INT8 deploy → SIA-pro LoRA fine-tune on Indian data → ASIC backend (Pillar 4).
+
+## GoC / Grants
+
+See `outputs/goc/`: `01_SIA_5_PILLAR_ONEPAGER.md`, `02_GRANTS_TRACKER.md`, `03_EMAIL_DRAFTS.md`, `SIA_5_Pillar_Plan.pptx` (9 slides, rebuild with `outputs/goc/build_pptx.py`). Daily digest cron → Telegram 02:30 UTC.

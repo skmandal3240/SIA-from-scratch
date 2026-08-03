@@ -31,6 +31,7 @@ class SIAConfig:
     mlp_mult: int = 4
     max_seq_len: int = 8192
     vocab_size: int = 128256  # LLaMA-3 tokenizer vocab
+    eos_id: int = 1  # <|eos|> (matches tokenizer SPECIAL_TOKENS)
 
     # Vision
     img_size: int = 336
@@ -162,19 +163,18 @@ class Attention(nn.Module):
 
     def forward(self, x: torch.Tensor, mask: Optional[torch.Tensor] = None, start_pos: int = 0) -> torch.Tensor:
         bsz, seqlen, _ = x.shape
-        q = self.q_proj(x).view(bsz, seqlen, self.n_heads, self.head_dim)
-        k = self.k_proj(x).view(bsz, seqlen, self.n_kv_heads, self.head_dim)
-        v = self.v_proj(x).view(bsz, seqlen, self.n_kv_heads, self.head_dim)
+        q = self.q_proj(x).view(bsz, seqlen, self.n_heads, self.head_dim).transpose(1, 2)
+        k = self.k_proj(x).view(bsz, seqlen, self.n_kv_heads, self.head_dim).transpose(1, 2)
+        v = self.v_proj(x).view(bsz, seqlen, self.n_kv_heads, self.head_dim).transpose(1, 2)
 
+        # RoPE on (bsz, nh, seqlen, hd); positions resume from start_pos
         q = apply_rotary_emb(q, self.freqs_cis[start_pos:start_pos + seqlen])
         k = apply_rotary_emb(k, self.freqs_cis[start_pos:start_pos + seqlen])
 
-        # GQA: repeat k/v heads
+        # GQA: repeat k/v heads (dim=1 is the head axis)
         if self.n_kv_heads != self.n_heads:
-            k = k.repeat_interleave(self.n_heads // self.n_kv_heads, dim=2)
-            v = v.repeat_interleave(self.n_heads // self.n_kv_heads, dim=2)
-
-        q, k, v = map(lambda t: t.transpose(1, 2), (q, k, v))  # (bsz, nh, seqlen, hd)
+            k = k.repeat_interleave(self.n_heads // self.n_kv_heads, dim=1)
+            v = v.repeat_interleave(self.n_heads // self.n_kv_heads, dim=1)
 
         attn = F.scaled_dot_product_attention(q, k, v, attn_mask=mask, scale=self.scale, is_causal=mask is None)
         attn = attn.transpose(1, 2).contiguous().view(bsz, seqlen, -1)
@@ -321,15 +321,14 @@ class AudioEncoder(nn.Module):
         ])
         self.norm = RMSNorm(config.audio_dim)
         self.proj = nn.Linear(config.audio_dim, config.dim, bias=False)
+        # Fixed-size positional embedding (stride 10 on 1024-frame mel -> ~103 tokens)
+        self.pos_embed = nn.Parameter(torch.zeros(1, (config.audio_target_len // 10) + 2, config.audio_dim))
+        nn.init.trunc_normal_(self.pos_embed, std=0.02)
 
     def forward(self, mel: torch.Tensor) -> torch.Tensor:
         # mel: (B, 1, n_mels, time)
         x = self.patch_embed(mel).flatten(2).transpose(1, 2)  # (B, N, D)
-        
-        # Dynamic pos_embed
-        if not hasattr(self, 'pos_embed') or self.pos_embed.shape[1] < x.shape[1]:
-            self.pos_embed = nn.Parameter(torch.zeros(1, x.shape[1], x.shape[2], device=x.device))
-            nn.init.trunc_normal_(self.pos_embed, std=0.02)
+        assert x.shape[1] <= self.pos_embed.shape[1], f"audio tokens {x.shape[1]} > pos_embed {self.pos_embed.shape[1]}"
         x = x + self.pos_embed[:, :x.shape[1]]
 
         for blk in self.blocks:
@@ -366,7 +365,7 @@ class TimestepEmbedding(nn.Module):
         )
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
-        half_dim = 256
+        half_dim = self.mlp[0].in_features // 2  # match MLP input dim for any config
         emb = math.log(10000) / (half_dim - 1)
         emb = torch.exp(torch.arange(half_dim, device=t.device) * -emb)
         emb = t[:, None] * emb[None, :]
@@ -415,7 +414,8 @@ class DiffusionHead(nn.Module):
             skips.append(h)
         h = self.mid(h)
         for layer, skip in zip(self.up, reversed(skips)):
-            h = layer(h + skip)
+            # ponytail: simplified UNet — only add the skip when resolutions align
+            h = layer(h + skip if h.shape == skip.shape else h)
         return self.out_proj(h)
 
 
@@ -569,7 +569,7 @@ class SIA(nn.Module):
         # Causal mask
         mask = None
         if x is not None and x.shape[1] > 1:
-            mask = torch.tril(torch.ones(x.shape[1], x.shape[1], device=x.device)).view(1, 1, x.shape[1], x.shape[1])
+            mask = torch.tril(torch.ones(x.shape[1], x.shape[1], dtype=torch.bool, device=x.device)).view(1, 1, x.shape[1], x.shape[1])
 
         # Backbone
         if x is not None:
@@ -591,7 +591,7 @@ class SIA(nn.Module):
             next_id = torch.multinomial(probs, 1)
             input_ids = torch.cat([input_ids, next_id], dim=1)
             # Stop if all sequences hit EOS
-            if (next_id == 128001).all():
+            if (next_id == self.config.eos_id).all():
                 break
         return input_ids
 
@@ -603,6 +603,16 @@ class SIA(nn.Module):
             t_tensor = torch.full((1,), t, device=prompt_embeds.device)
             noise_pred = self.image_gen(latents, t_tensor, prompt_embeds)
             # DDIM step (simplified)
+            latents = latents - noise_pred * (1 / steps)
+        return latents
+
+    @torch.no_grad()
+    def generate_audio(self, prompt_embeds: torch.Tensor, steps: int = 30, n_mels: int = 64, frames: int = 64) -> torch.Tensor:
+        # Simplified DDPM sampling into a mel spectrogram; decode with modalities.griffin_lim
+        latents = torch.randn(1, 1, n_mels, frames, device=prompt_embeds.device)
+        for t in reversed(range(steps)):
+            t_tensor = torch.full((1,), t, device=prompt_embeds.device)
+            noise_pred = self.audio_gen(latents, t_tensor, prompt_embeds)
             latents = latents - noise_pred * (1 / steps)
         return latents
 

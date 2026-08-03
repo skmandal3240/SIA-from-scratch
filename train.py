@@ -2,6 +2,7 @@
 SIA Training Pipeline — text, multimodal, and swarm training.
 Supports: pretrain, SFT, DPO, multimodal fine-tune, swarm RL.
 """
+import contextlib
 import json
 import os
 import yaml
@@ -15,11 +16,13 @@ import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader, IterableDataset
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR
+import torch.nn.functional as F
 from torch.cuda.amp import GradScaler, autocast
 from accelerate import Accelerator
 from huggingface_hub import hf_hub_download
 
 from sia import SIA, SIAConfig, count_params
+from tokenizer import SIATokenizer  # single tokenizer implementation (tokenizers lib)
 
 
 # ============================================================
@@ -74,6 +77,12 @@ class TrainConfig:
     resume_from: str = ""
 
     def __post_init__(self):
+        # Coerce numeric fields: YAML can hand back strings (e.g. '3e-4')
+        for f in ("lr", "min_lr", "weight_decay", "beta1", "beta2", "grad_clip"):
+            setattr(self, f, float(getattr(self, f)))
+        for f in ("warmup_steps", "max_steps", "save_every", "eval_every", "log_every",
+                  "max_seq_len", "batch_size", "micro_batch_size", "image_size", "audio_mel_bins"):
+            setattr(self, f, int(getattr(self, f)))
         assert self.batch_size % self.micro_batch_size == 0
         self.grad_accum = self.batch_size // self.micro_batch_size
 
@@ -87,35 +96,6 @@ class TrainConfig:
         Path(path).parent.mkdir(parents=True, exist_ok=True)
         with open(path, "w") as f:
             yaml.dump(asdict(self), f)
-
-
-# ============================================================
-# Tokenizer (wraps HF tokenizer)
-# ============================================================
-class SIATokenizer:
-    def __init__(self, path: str = ""):
-        if path and os.path.exists(path):
-            from tokenizers import Tokenizer
-            self.tok = Tokenizer.from_file(path)
-        else:
-            # Default: LLaMA-3 tokenizer
-            from transformers import AutoTokenizer
-            self.tok = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B-Instruct")
-            self.tok.pad_token = self.tok.eos_token
-
-    @property
-    def vocab_size(self) -> int:
-        return self.tok.get_vocab_size() if hasattr(self.tok, "get_vocab_size") else len(self.tok.get_vocab())
-
-    def encode(self, text: str) -> List[int]:
-        return self.tok.encode(text).ids if hasattr(self.tok, "encode") else self.tok(text).input_ids
-
-    def decode(self, ids: List[int]) -> str:
-        return self.tok.decode(ids) if hasattr(self.tok, "decode") else self.tok.decode(ids)
-
-    def save(self, path: str):
-        if hasattr(self.tok, "save"):
-            self.tok.save(path)
 
 
 # ============================================================
@@ -206,6 +186,9 @@ class MultimodalDataset(IterableDataset):
 # Training Loop
 # ============================================================
 def train(config: TrainConfig):
+    if not torch.cuda.is_available():
+        config.dtype = "fp32"  # CPU: no bf16/fp16 autocast
+
     accelerator = Accelerator(
         mixed_precision=config.dtype if config.dtype != "fp32" else "no",
         gradient_accumulation_steps=config.grad_accum,
@@ -229,13 +212,14 @@ def train(config: TrainConfig):
             setattr(model_cfg, k, v)
 
     model_cfg.max_seq_len = config.max_seq_len
+
+    # Tokenizer (sync model vocab/eos to the trained tokenizer)
+    tokenizer = SIATokenizer(config.tokenizer_path)
+    model_cfg.vocab_size = tokenizer.vocab_size
+    model_cfg.eos_id = tokenizer.eos_id
+
     model = SIA(model_cfg)
     accelerator.print(f"Model params: {count_params(model):,}")
-
-    # Tokenizer
-    tokenizer = SIATokenizer(config.tokenizer_path)
-    if model_cfg.vocab_size != tokenizer.vocab_size:
-        accelerator.print(f"Warning: model vocab {model_cfg.vocab_size} != tokenizer vocab {tokenizer.vocab_size}")
 
     # Data
     train_ds = TextDataset(config.train_data, config.max_seq_len, tokenizer) if not config.use_vision else \
@@ -251,7 +235,7 @@ def train(config: TrainConfig):
         lr=config.lr,
         betas=(config.beta1, config.beta2),
         weight_decay=config.weight_decay,
-        fused=True,
+        fused=torch.cuda.is_available(),
     )
 
     # Scheduler
@@ -264,7 +248,7 @@ def train(config: TrainConfig):
     model, optimizer, train_loader, scheduler = accelerator.prepare(
         model, optimizer, train_loader, scheduler
     )
-    if val_loader:
+    if val_loader is not None:
         val_loader = accelerator.prepare(val_loader)
 
     # Resume
@@ -286,14 +270,16 @@ def train(config: TrainConfig):
             break
 
         with accelerator.accumulate(model):
-            with autocast(enabled=config.dtype != "fp32", dtype=getattr(torch, config.dtype)):
+            with (torch.autocast("cuda", dtype=getattr(torch, config.dtype))
+                  if torch.cuda.is_available() else contextlib.nullcontext()):
                 input_ids = batch["input_ids"]
                 labels = batch["labels"]
                 images = batch.get("images")
                 audio = batch.get("audio")
 
                 # Forward
-                logits = model(input_ids, images=images, audio=audio)
+                hidden = model(input_ids, images=images, audio=audio)
+                logits = model.text_head(hidden)
                 loss = F.cross_entropy(logits.view(-1, logits.size(-1)), labels.view(-1))
 
             # Backward
@@ -314,15 +300,17 @@ def train(config: TrainConfig):
                 accelerator.print(f"Step {step}/{config.max_steps} | Loss: {loss.item():.4f} | LR: {lr:.2e}")
 
         # Eval
-        if step % config.eval_every == 0 and step > 0 and val_loader:
+        if step % config.eval_every == 0 and step > 0 and val_loader is not None:
             model.eval()
             val_losses = []
             with torch.no_grad():
                 for i, batch in enumerate(val_loader):
                     if i >= 50:
                         break
-                    with autocast(enabled=config.dtype != "fp32", dtype=getattr(torch, config.dtype)):
-                        logits = model(batch["input_ids"], images=batch.get("images"), audio=batch.get("audio"))
+                    with (torch.autocast("cuda", dtype=getattr(torch, config.dtype))
+                          if torch.cuda.is_available() else contextlib.nullcontext()):
+                        hidden = model(batch["input_ids"], images=batch.get("images"), audio=batch.get("audio"))
+                        logits = model.text_head(hidden)
                         loss = F.cross_entropy(logits.view(-1, logits.size(-1)), batch["labels"].view(-1))
                     val_losses.append(loss.item())
             val_loss = sum(val_losses) / len(val_losses)
@@ -341,6 +329,8 @@ def train(config: TrainConfig):
 
     # Final save
     accelerator.save_state(f"{config.out_dir}/final")
+    if accelerator.is_main_process:
+        torch.save(accelerator.unwrap_model(model).state_dict(), f"{config.out_dir}/sia.pt")
     accelerator.print("Training complete.")
 
 

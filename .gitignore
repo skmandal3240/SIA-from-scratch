@@ -13,6 +13,8 @@ out/
 data/
 *.bin
 *.pt
+checkpoints/
+.venv/
 
 # IDE
 .idea/
