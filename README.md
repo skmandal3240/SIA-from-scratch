@@ -26,7 +26,7 @@ Status: **WORKING** (trained nano model, all demos pass). Routes to the AI 5-Pil
 .venv/bin/python prepare_data.py            # build tokenizer + .bin data
 .venv/bin/python train.py --config configs/sia_nano_demo.yaml   # ~4 min CPU, 500 steps
 .venv/bin/python demos.py                   # run all 9 demos -> outputs/
-.venv/bin/python generate.py --prompt "To be, or not to be" --max-new 60
+.venv/bin/python generate.py --modality text --prompt "To be, or not to be" --max_new 60
 ```
 
 ## Verified
