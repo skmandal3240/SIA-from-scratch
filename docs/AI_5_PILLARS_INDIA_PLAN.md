@@ -1,0 +1,135 @@
+# AI 5-PILLAR PLAN — India-First, Self-Funded (SIA + Mandal Ecosystem)
+
+**Source video:** "OpenAI's TRILLION Dollar Comeback : How Altman Turned a $27B Loss Into an EMPIRE?" — Think School (youtu.be/opLMb_oYfMI)
+**Date:** 03 Aug 2026
+**Note:** Video transcript blocked from VPS (YouTube datacenter IP ban). Analysis grounded in the video's empire thesis (energy → silicon → data centers → models → apps) + our pillar mapping + verified India facts below.
+
+---
+
+## The 5 Pillars (stack order, bottom → top)
+
+| # | Pillar | India lever | Status (Aug 2026) |
+|---|--------|-------------|-------------------|
+| 5 | Energy | Nuclear criticality (PFBR) | PFBR Kalpakkam 500 MWe first criticality 6 Apr 2026 (indigenous, BHAVINI/DAE). Nuclear Mission: 100 GW by 2047. Bharat Small Reactors (220 MWe) opening to private sector |
+| 4 | Hardware | Tata silicon + LPU/optical + custom software | Tata-PSMC Dholera 28nm fab: trial production Dec 2026, ~50K wafers/mo by 2028. Tata OSAT Assam. India Semiconductor Mission ₹76,000 Cr |
+| 3 | Infrastructure | Rent Indian govt/company compute | IndiaAI Mission: 38,000+ GPUs deployed; startups get up to 40% off → ₹65–92/hr (H100 on-demand ~₹217/hr, spot ~₹70/hr). Empaneled: Jio, Yotta, E2E (MeitY GI Cloud), Tata Comms, C-DAC PARAM. Portal: compute.indiaai.gov.in |
+| 2 | Models | SIA Edge AI everywhere (drones, cameras, networks) | SIA-from-scratch transformer core in progress (/root/SIA-from-scratch) |
+| 1 | Applications | Revenue → funds all R&D | None yet — this is the engine |
+
+---
+
+## Three reality corrections (say once, build accordingly)
+
+1. **LPU ≠ optical processor.** Groq's LPU is an SRAM-based tensor streaming chip (no HBM) — it ships today and is real. Photonic/optical processors (Lightmatter, Lightelligence) are separate, lab/early-commercial tech, and India has no optical chip maker yet. Plan: adopt SRAM/LPU-class inference thinking now; treat optical as 2028+ R&D with IITs/IISc, never a product dependency.
+2. **Tata's fab can't make datacenter GPUs** (28nm, no EUV, no HBM, no advanced packaging). It CAN make edge AI ASICs for cameras/drones/phones. So: design our own edge accelerator on 28nm, manufacture with Tata; rent NVIDIA-class GPUs for training.
+3. **Nuclear criticality ≠ cheap power at our socket.** PFBR must ramp to full power; grid tariffs still apply. Solar PPAs (~₹2.5–3/kWh) are the near-term cheap power. Nuclear = 2030s baseload bet, aligned with Bharat Small Reactor commercialisation.
+
+---
+
+## PILLAR 5 — ENERGY (India nuclear criticality)
+
+**Fact base:** PFBR Kalpakkam reached first criticality 6 Apr 2026 (start of controlled fission chain reaction), built by BHAVINI/DAE — the world's biggest step in India's 3-stage nuclear program (thorium path). 5 more reactors approved (Kudankulam 3–4, Kaiga 5–6, Gorakhpur 1–2). Bharat Small Reactors (BSR, 220 MWe) opening to private industry — first SMRs targeted 2033.
+
+**Step by step:**
+1. **Now — don't chase reactors.** Cut energy cost at the model level: quantised edge models (INT4/INT8) = 10–50x less energy per inference; train on IndiaAI-subsidised compute where energy is already priced in.
+2. **12–24 mo:** sign a green PPA (IEX green market or SECI) for future own-DC; site DC near cheap power (Rajasthan/Gujarat solar, Himachal hydro); liquid cooling, target PUE < 1.3.
+3. **24–60 mo:** when BSR private participation opens (2030s), apply as anchor tenant / strategic investor for dedicated nuclear power allocation (NPCIL). Keep a DC siting plan for a Tamil Nadu campus near Kalpakkam for the nuclear-adjacent future.
+4. **KPI:** blended ₹/kWh delivered; target < ₹4/kWh.
+
+---
+
+## PILLAR 4 — HARDWARE (Tata chip collab + LPU/optical + custom software)
+
+**Fact base:** Dholera 28nm fab trial production Dec 2026, commercial ramp 2027–28, 50K wafers/mo. Design Linked Incentive (DLI) covers up to ~50% of design cost. No EUV → mature nodes only.
+
+**Step by step:**
+1. **Now:** define the SIA Edge silicon target — RISC-V + NPU edge accelerator, 28nm class, for cameras/drones/phones. Partners: InCore/C-DAC for RISC-V cores, Tata Electronics for manufacture. Design is cheap; fab is the long pole — start design NOW.
+2. **Now:** hardware-agnostic software layer so nothing locks to NVIDIA: inference on ONNX Runtime / llama.cpp / vLLM; models portable to our ASIC/LPU later via a config change, not a rewrite.
+3. **12–24 mo:** approach Tata Electronics innovation team with ONE concrete ask: tape out one edge AI SoC on Dholera 28nm, first silicon 2027–28. Use DLI + Make-in-India PLI.
+4. **24–60 mo:** optical/LPU track — fund 1–2 research collaborations (IIT Madras photonics, IISc) on photonic tensor cores; adopt only when a working Indian fab partner exists. Evaluate LPU-class SRAM inference only if cost beats GPU.
+5. **Deliverable markers:** RTL spec → FPGA prototype → tape-out → first silicon running SIA-Edge.
+
+---
+
+## PILLAR 3 — INFRASTRUCTURE (rent Indian, build later)
+
+**Fact base:** IndiaAI compute portal live with price calculator; eligible startups up to 40% reduced cost. Empaneled providers incl. Jio, Yotta, E2E Networks (MeitY GI Cloud), Tata Communications, C-DAC PARAM.
+
+**Step by step:**
+1. **Week 1:** apply on the IndiaAI compute portal (needs DPIIT/Startup India recognition — check our registration). Get subsidised GPU ₹/hr. Apply in parallel for MeitY/IndiaAI compute credits + SAMRIDH / TIDE 2.0 grants.
+2. **Month 1–12:** run ALL training on rented Indian GPU (Jio / Yotta / E2E). Keep workloads portable: K8s/Slurm + containerised training so switching provider = config change.
+3. **Month 12–24:** when GPU spend exceeds ~₹10–15L/month sustained, colocate racks (CtrlS / Yotta / NxtGen) instead of building. Stay in India for DPDP Act data residency — it's a selling point.
+4. **Own DC trigger:** revenue covers 100% of capex, or a grant is secured. Then build greenfield DC near cheap power (Pillar 5) with our ASIC inference racks (Pillar 4).
+5. **Rule:** never buy GPUs before utilisation > 70% and revenue covers depreciation.
+
+---
+
+## PILLAR 2 — MODELS (SIA Edge AI for everything)
+
+**Strategy:** not one giant model — a family:
+- **SIA-lite** (0.5–1B): cameras, drones, IoT, microcontrollers
+- **SIA-edge** (3–8B): on-prem servers, phones, edge boxes
+- **SIA-pro** (fine-tuned open 70B-class): cloud API
+
+Multimodal in stages: text → vision → audio → video/code.
+
+**Step by step:**
+1. **Now:** finish the SIA-from-scratch transformer core (tokenizer → attention → training) — in progress. Add Hindi + 22 scheduled-language tokenizer using AI4Bharat/Bhashini corpora.
+2. **Month 3–6:** LoRA fine-tune a 7–8B open model (Qwen/Llama/Mistral) on Indian data → SIA-pro API. Days, not months, on one rented GPU. This is our IP: weights + Indian datasets + deployment stack.
+3. **Month 6–12:** SIA-edge 3B quantised INT4/INT8 (llama.cpp/ONNX); deploy on drone/edge hardware (Jetson / RK3588 / RISC-V); add vision (SigLIP/ViT) + audio (Whisper fine-tuned on Indian accents).
+4. **Month 12+:** SIA-lite distillation for cameras/IoT; video + codegen; swap to our ASIC backend (Pillar 4).
+5. **Do NOT** pretrain a 70B from scratch yet — $10M+ and no moat. Skip until revenue justifies.
+
+---
+
+## PILLAR 1 — APPLICATIONS (revenue engine → funds all R&D)
+
+**Rule:** one profitable app before scaling anything. Sell outcomes, not tokens. Reinvest 30–50% of margin into Pillars 2–4 (your stated rule).
+
+**Step by step:**
+1. **Now — pick ONE app with a paying customer this quarter.** Recommended order:
+   - **#1 (chosen): Vernacular AI support/agent platform** — Hindi + regional-language voice/text agents for Indian enterprises & BPOs. Fastest cash: every Indian company has a support budget; sell per-resolution. No hardware, no permissions, pure SaaS.
+   - #2 (mo 6–12): Drone/camera edge analytics (agri inspection, smart-city, security) on SIA-edge — matches the "SIA everywhere" vision, but needs hardware + pilots → slower.
+   - #3: Govt/PSU document processing (Hindi/regional) — tender-friendly but long sales cycles.
+   - #4: Inference API for Indian-language models.
+2. **This quarter:** build app #1 MVP on top of SIA-pro (fine-tune in parallel); sign 1 anchor enterprise; bill via UPI/invoice. Report revenue weekly.
+3. **Month 6+:** second app from the same model family (near-zero new model cost). Scale with data residency + vernacular as the wedge.
+4. **All entities Indian:** SIA AI Pvt Ltd (models) + Mandal Devices (hardware) + Akasha Runtime (agents) under Saurabh Mandal Holdings.
+
+---
+
+## EXECUTION ORDER (money-first, cheapest first)
+
+| Phase | Window | Focus |
+|-------|--------|-------|
+| 0 | weeks 1–4 | IndiaAI compute credits + grants; finish SIA core; app #1 POC to 5 customers |
+| 1 | mo 2–6 | App #1 live + first revenue; SIA-pro LoRA fine-tune; edge quantisation |
+| 2 | mo 6–12 | App #2 (drone/camera); SIA-edge on hardware; RISC-V SoC design start; FPGA demo |
+| 3 | yr 2 | Tape-out edge ASIC (28nm, DLI subsidy); colocation; SIA-lite family |
+| 4 | yr 3–5 | Own DC near green power; optical R&D; Bharat Small Reactor application; export to Global South |
+
+---
+
+## COST TABLE (indicative ₹)
+
+| Item | Cost | When |
+|------|------|------|
+| IndiaAI subsidised GPU | ₹65–92/hr | now |
+| SIA-pro LoRA fine-tune | ~₹20–60K (100–200 GPU-hrs) | mo 3 |
+| SIA-edge quantise + deploy | ₹2–5L (devkits) | mo 6–12 |
+| Edge ASIC design + FPGA | ₹40–80L (DLI covers ~50%) | yr 2 |
+| 28nm tape-out with Tata | ₹15–30 Cr (shared w/ partners) | yr 2–3 |
+| Colocation racks | ₹3–6L/mo per rack | yr 2 |
+| Own DC | ₹50–150 Cr | yr 4+ (revenue-funded) |
+
+---
+
+## FIRST 7 DAYS
+
+1. Apply on IndiaAI compute portal (need DPIIT/Startup India number — confirm registration status).
+2. Apply SAMRIDH / TIDE 2.0 / IndiaAI grants (track deadlines).
+3. Ship SIA transformer core smoke test (on track).
+4. List 20 candidate app #1 customers; call 5.
+5. Draft intro emails: Tata Electronics innovation team + InCore.
+6. Read PFBR / Bharat Small Reactor private-participation policy (energy roadmap file).
+7. Update this file weekly; report skipped items explicitly.
