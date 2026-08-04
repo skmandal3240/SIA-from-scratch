@@ -1,0 +1,19 @@
+AUDIO: outputs/demo_music_input.wav
+ANALYSIS: {'duration_s': 2.0, 'dominant_hz': 250.0, 'note': 'B3', 'onsets': 0, 'tempo_bpm': 0}
+
+PROMPT: You are SIA, a private on-device AI companion. You just listened to an audio recording. Here is what your audio analysis detected: duration 2.0s, dominant frequency 250.0 Hz (musical note B3), 0 onsets, tempo about 0 BPM. Describe in two short sentences what kind of sound this is and what it might mean.
+
+SIA: The death of the heart, if not a more and the day,
+To a name to the state in the rest.
+
+Which you that I am a very brother.
+
+
+And thou my lord, I know not, the world,
+And as a the state to the king,
+And I be thy people.
+
+
+First:
+
+We:
