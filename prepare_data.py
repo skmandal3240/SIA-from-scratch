@@ -23,6 +23,10 @@ def gather_corpus() -> str:
     asst = ROOT / "data" / "assistant_corpus.txt"
     if asst.exists():
         parts.append(asst.read_text(encoding="utf-8", errors="ignore"))
+    # Learning corpus: PDFs extracted from the user's reference drive (knowledge base)
+    learn = ROOT / "data" / "learning_corpus.txt"
+    if learn.exists():
+        parts.append(learn.read_text(encoding="utf-8", errors="ignore"))
     # Code + docs teach the model codegen structure
     for p in sorted(ROOT.glob("*.py")) + sorted(ROOT.glob("*.md")) + sorted(ROOT.glob("*.yaml")):
         if p.name == "corpus.txt":
