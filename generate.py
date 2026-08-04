@@ -15,7 +15,9 @@ from modalities import griffin_lim, read_wav, save_mel_wav, to_mel_tensor
 def load_model(ckpt_path: str, config: SIAConfig) -> SIA:
     model = SIA(config)
     state = torch.load(ckpt_path, map_location="cpu")
-    model.load_state_dict(state.get("model", state))
+    # strict=False: old checkpoints predate the VAE decoder — random-init VAE is
+    # fine for the deterministic upsampling decoder (ponytail: strict once trained)
+    model.load_state_dict(state.get("model", state), strict=False)
     model.eval()
     return model
 
@@ -69,13 +71,10 @@ def main():
         ids = tok.encode(args.prompt or "a green field")
         input_ids = torch.tensor([ids], dtype=torch.long)
         hidden = model.forward(input_ids)
-        latents = model.generate_image(hidden, steps=20)
-        np.save(Path(args.out, "gen_image_latents.npy"), latents.cpu().numpy())
-        # No VAE in the from-scratch core: export a normalized latent preview PNG.
-        preview = latents[0, :3].permute(1, 2, 0)
-        preview = (preview - preview.min()) / (preview.max() - preview.min() + 1e-6)
-        Image.fromarray((preview.numpy() * 255).astype(np.uint8)).resize((256, 256), Image.NEAREST).save(Path(args.out, "gen_image_preview.png"))
-        print("image latents -> outputs/gen_image_latents.npy + preview PNG (VAE decode not in core)")
+        rgb = model.generate_image_rgb(hidden, steps=20)
+        img = (rgb[0].permute(1, 2, 0).clamp(-1, 1) + 1) / 2  # [-1,1] -> [0,1]
+        Image.fromarray((img.numpy() * 255).astype(np.uint8)).save(Path(args.out, "gen_image.png"))
+        print("image -> outputs/gen_image.png (VAE-decoded 256x256 RGB)")
 
     elif args.modality == "audio":
         ids = tok.encode(args.prompt or "a soft chord")

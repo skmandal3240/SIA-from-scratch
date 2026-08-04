@@ -436,6 +436,49 @@ class AudioDiffusionHead(DiffusionHead):
 
 
 # ============================================================
+# VAE Decoder (latent 4x32x32 -> RGB 3x256x256)
+# ============================================================
+class VAEDecoder(nn.Module):
+    """Lightweight VAE-style decoder: upscales 4-ch latent to 256x256 RGB.
+    Not a trained VAE — deterministic upsampling decoder so image generation
+    produces viewable PNGs without external models. ponytail: swap for a trained
+    VAE (e.g. SD's) when image quality matters."""
+
+    def __init__(self, latent_ch: int = 4, hidden: int = 256, out_size: int = 256):
+        super().__init__()
+        self.head = nn.Sequential(
+            nn.Conv2d(latent_ch, hidden, 3, padding=1),
+            nn.SiLU(),
+        )
+        # 32 -> 64 -> 128 -> 256
+        self.up1 = self._up(hidden, hidden)
+        self.up2 = self._up(hidden, hidden)
+        self.up3 = nn.Sequential(
+            nn.ConvTranspose2d(hidden, hidden // 2, 4, stride=2, padding=1),
+            nn.SiLU(),
+            nn.Conv2d(hidden // 2, 3, 3, padding=1),
+            nn.Tanh(),
+        )
+
+    @staticmethod
+    def _up(cin: int, cout: int) -> nn.Module:
+        return nn.Sequential(
+            nn.ConvTranspose2d(cin, cout, 4, stride=2, padding=1),
+            nn.SiLU(),
+            nn.Conv2d(cout, cout, 3, padding=1),
+            nn.SiLU(),
+        )
+
+    def forward(self, latents: torch.Tensor) -> torch.Tensor:
+        # latents: (B, 4, 32, 32)
+        x = self.head(latents)
+        x = self.up1(x)
+        x = self.up2(x)
+        x = self.up3(x)
+        return x  # (B, 3, 256, 256) in [-1, 1]
+
+
+# ============================================================
 # Tool Use Head
 # ============================================================
 class ToolHead(nn.Module):
@@ -514,6 +557,7 @@ class SIA(nn.Module):
         self.image_gen = ImageDiffusionHead(config)
         self.video_gen = VideoDiffusionHead(config)
         self.audio_gen = AudioDiffusionHead(config)
+        self.vae = VAEDecoder()  # latent 4x32x32 -> RGB 3x256x256
 
         # Tool use
         self.tool_head = ToolHead(config)
@@ -605,6 +649,17 @@ class SIA(nn.Module):
             # DDIM step (simplified)
             latents = latents - noise_pred * (1 / steps)
         return latents
+
+    @torch.no_grad()
+    def decode_image(self, latents: torch.Tensor) -> torch.Tensor:
+        """VAE-decode latents (B,4,32,32) -> RGB image (B,3,256,256) in [-1,1]."""
+        return self.vae(latents)
+
+    @torch.no_grad()
+    def generate_image_rgb(self, prompt_embeds: torch.Tensor, steps: int = 15, cfg: float = 7.5) -> torch.Tensor:
+        """generate_image + VAE decode in one call -> viewable RGB tensor."""
+        lat = self.generate_image(prompt_embeds, steps=steps, cfg=cfg)
+        return self.decode_image(lat)
 
     @torch.no_grad()
     def generate_audio(self, prompt_embeds: torch.Tensor, steps: int = 30, n_mels: int = 64, frames: int = 64) -> torch.Tensor:

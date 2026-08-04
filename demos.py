@@ -33,7 +33,8 @@ def main():
     ckpt = ROOT / "checkpoints" / "sia_nano_demo" / "sia.pt"
     if ckpt.exists():
         model = SIA(cfg)
-        model.load_state_dict(torch.load(ckpt, map_location="cpu"))
+        # strict=False: old checkpoints predate the VAE decoder
+        model.load_state_dict(torch.load(ckpt, map_location="cpu"), strict=False)
         print(f"Loaded trained checkpoint {ckpt}")
     else:
         model = SIA(cfg)
@@ -95,14 +96,13 @@ def main():
     print("saved outputs/demo_gen_audio.wav")
 
     # 6. IMAGE GEN
-    banner("6) IMAGE — latent generation")
+    banner("6) IMAGE — VAE-decoded generation")
     ids = tok.encode("a green field at sunrise")
     hidden = model.forward(torch.tensor([ids]))
-    lat = model.generate_image(hidden, steps=15)
-    preview = lat[0, :3].permute(1, 2, 0)
-    preview = (preview - preview.min()) / (preview.max() - preview.min() + 1e-6)
-    Image.fromarray((preview.numpy() * 255).astype(np.uint8)).resize((256, 256), Image.NEAREST).save(ROOT / "outputs" / "demo_gen_image.png")
-    print("saved outputs/demo_gen_image.png (latent preview; VAE not in core)")
+    rgb = model.generate_image_rgb(hidden, steps=15)
+    img = (rgb[0].permute(1, 2, 0).clamp(-1, 1) + 1) / 2
+    Image.fromarray((img.numpy() * 255).astype(np.uint8)).save(ROOT / "outputs" / "demo_gen_image.png")
+    print("saved outputs/demo_gen_image.png (VAE-decoded 256x256 RGB)")
 
     # 7. VIDEO
     banner("7) VIDEO — frame-wise latent animation")
