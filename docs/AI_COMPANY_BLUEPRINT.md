@@ -42,7 +42,6 @@ on Indian data → ASIC backend (Pillar 4).
 | Job | Schedule (UTC) | Coverage |
 |-----|----------------|----------|
 | SIA AI-India Daily Brief | 04:00 | grants, policy, edge AI |
-| SWARG CITY Real Estate Brief | 04:15 | Patna/Bihta market (sibling vertical) |
 | AUTOBOTS EV Brief | 04:30 | EV policy, launches, infra |
 | SIA 5-Pillar Digest | 02:30 | internal pillar status |
 
