@@ -19,6 +19,10 @@ def gather_corpus() -> str:
     sh = ROOT / "data" / "shakespeare.txt"
     if sh.exists():
         parts.append(sh.read_text(encoding="utf-8", errors="ignore"))
+    # Assistant-style conversational data teaches SIA how to answer as a companion
+    asst = ROOT / "data" / "assistant_corpus.txt"
+    if asst.exists():
+        parts.append(asst.read_text(encoding="utf-8", errors="ignore"))
     # Code + docs teach the model codegen structure
     for p in sorted(ROOT.glob("*.py")) + sorted(ROOT.glob("*.md")) + sorted(ROOT.glob("*.yaml")):
         if p.name == "corpus.txt":
