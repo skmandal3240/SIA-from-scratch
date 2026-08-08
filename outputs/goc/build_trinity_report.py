@@ -213,9 +213,9 @@ table(["Stage", "Goal", "Illustrative Range"], [
     ("National", "Infrastructure", "₹500–2,000 Cr"),
     ("Global", "Expansion", "₹2,000 Cr+"),
 ])
-p("Illustrative planning ranges only — actual funding depends on milestones, eligibility, investor appetite, and program requirements.")
+p("Illustrative planning ranges only — actual funding depends on milestones, eligibility, investor appetite, and program requirements. Company registered in Bengaluru, Karnataka.")
 h2("Government sources")
-p("IndiaAI Mission, Startup India, MeitY (TIDE 2.0 / SAMRIDH), ANRF, DST (SISFS, NIDHI-PRAYAS), Digital India, Semiconductor Mission (DLI/PLI), IN-SPACe, state startup missions. Each has distinct eligibility, equity-vs-grant, timeline, and milestone requirements.")
+p("IndiaAI Mission, Startup India, MeitY (TIDE 2.0 / SAMRIDH), ANRF, DST (SISFS, NIDHI-PRAYAS), Digital India, Semiconductor Mission (DLI/PLI), IN-SPACe, state startup missions (incl. Karnataka state schemes). Each has distinct eligibility, equity-vs-grant, timeline, and milestone requirements.")
 h2("Private sources")
 p("Angels, deep-tech VCs, AI-focused VCs, strategic investors, hyperscalers, semiconductor companies, sovereign wealth funds.")
 
@@ -234,6 +234,7 @@ p("Evidence-based framing only. Current AI capabilities are narrow; scientific l
 # ============ 19. TEAM ============
 h1("19. Team & Hiring Plan")
 bullet("Founder: Saurabh Mandal — built the from-scratch SIA framework (tokenizer, transformer, multimodal, tools), 3 prior products (ASTRO, ALICE, SIA)")
+bullet("Legal entity: Indian Private Limited Company being incorporated via SPICe+, registered office in Bengaluru, Karnataka (India's AI talent and venture capital hub)")
 bullet("Hiring plan: 1–2 junior engineers (Year 1), ML engineers + infra (Year 2–3), full team at enterprise phase")
 p("Detailed hiring plan in Appendices.")
 
