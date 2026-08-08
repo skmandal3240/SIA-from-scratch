@@ -163,13 +163,13 @@ bullet("TIDE 2.0 application dossier  ✅ (04_TIDE2_DOSSIER)")
 h1("3. Prioritisation (What Unblocks What)")
 table(["Priority", "Deliverable", "Why it matters"],
 [
-    ["1", "TAM/SAM/SOM + financial model", "Every investor asks; without it, valuation (page 26) is empty"),
-    ["2", "Register + DPIIT numbers", "Gates government programs (TIDE 2.0/SAMRIDH/IndiaAI)"),
-    ["3", "Architecture diagrams (5-layer + model family)", "Makes the technical story memorable"),
-    ["4", "Competitive matrix + evidence", "Substantiates the moat claim"),
-    ["5", "GTM channel plan + pricing", "Shows repeatability behind revenue"),
-    ["6", "Hiring plan + advisory candidates", "Team credibility beyond founder"),
-    ["7", "Valuation model + sensitivity", "Sets the round range"),
+    ["1", "TAM/SAM/SOM + financial model", "Every investor asks; without it, valuation (page 26) is empty"],
+    ["2", "Register + DPIIT numbers", "Gates government programs (TIDE 2.0/SAMRIDH/IndiaAI)"],
+    ["3", "Architecture diagrams (5-layer + model family)", "Makes the technical story memorable"],
+    ["4", "Competitive matrix + evidence", "Substantiates the moat claim"],
+    ["5", "GTM channel plan + pricing", "Shows repeatability behind revenue"],
+    ["6", "Hiring plan + advisory candidates", "Team credibility beyond founder"],
+    ["7", "Valuation model + sensitivity", "Sets the round range"],
 ])
 
 # ============ 4. PRODUCTION PROCESS ============
