@@ -8,6 +8,15 @@ from pathlib import Path
 from docx import Document
 from docx.shared import Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+def add_figure(path, caption=None):
+    from docx.shared import Inches
+    if Path(path).exists():
+        if caption:
+            doc.add_paragraph(caption)
+        doc.add_picture(str(path), width=Inches(6.3))
+        doc.paragraphs[-1].alignment = WD_ALIGN_PARAGRAPH.CENTER
+        doc.add_paragraph()
+
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 OUT = ROOT / "outputs" / "goc" / "Project_TRINITY_Master_Report.docx"
@@ -138,6 +147,7 @@ bullet("Indian-language + Indian-context datasets (the untapped moat)")
 bullet("SIA Memory: consistent, personalized cross-device experience; compatible memory formats across tiers")
 bullet("Synthetic data pipeline to scale scarce domain datasets")
 bullet("Public + enterprise + government datasets; future data marketplace")# ============ 7. PILLAR 3 — MODELS ============
+add_figure("outputs/goc/diagrams/02_sia_model_family.png", "Figure 2: SIA model family — one AI OS, four hardware tiers, one shared stack.")
 h1("7. Pillar 3 — Foundation Models (SIA)")
 p("SIA is an AI operating system — a family of models, not one giant model, all sharing the same stack:")
 table(["Tier", "Size", "Target"],
@@ -172,6 +182,8 @@ table(["Module", "Role"],
 p("Target verticals: healthcare, education, agriculture, manufacturing, defence, space, government, consumer AI.")
 
 # ============ 10. TECHNOLOGY ARCHITECTURE ============
+add_figure("outputs/goc/diagrams/01_5layer_ai_stack.png", "Figure 1: The 5-Layer AI stack — coding agents to chip + energy.")
+add_figure("outputs/goc/diagrams/03_memory-agents-loop.png", "Figure 3: SIA memory / agent / tool loop with DPDP privacy boundary.")
 h1("10. Technology Architecture")
 p("The 5-Layer AI stack:")
 table(["Layer", "Slice"],
