@@ -5,7 +5,7 @@
 
 ## 1. Identity
 - **Company name:** SIA AI (working title; legal name TBD at incorporation)
-- **Legal form (India):** Private Limited Company (Pvt Ltd), registered office Patna/Bengaluru (TBD)
+- **Legal form (India):** Private Limited Company (Pvt Ltd), registered office Bengaluru (India AI hub)
 - **Parent group:** MANDAL HOLDINGS
 - **Brand tagline:** *"Your private intelligence, on your device."*
 
@@ -30,7 +30,7 @@ through one profitable application before scaling (Pillar 1 rule).
 ## 5. Business model
 - **B2C:** freemium companion app (privacy as the premium feature).
 - **B2B:** white-label edge AI for Indian OEMs / enterprise fleets.
-- **Grants (non-dilutive):** SISFS, MeitY TIDE 2.0 / SAMRIDH, IndiaAI, Bihar Startup Policy, NIDHI-PRAYAS.
+- **Grants (non-dilutive):** SISFS, MeitY TIDE 2.0 / SAMRIDH, IndiaAI, NIDHI-PRAYAS, Karnataka state schemes.
 - Rule: reinvest 30–50% of margin into Pillars 2–4.
 
 ## 6. Roadmap (Pillar 2, from SIA-from-scratch)
@@ -46,7 +46,7 @@ on Indian data → ASIC backend (Pillar 4).
 | SIA 5-Pillar Digest | 02:30 | internal pillar status |
 
 ## 8. Open decisions
-- [ ] Legal entity name + incorporation state (Bihar vs Bengaluru)
+- [ ] Legal entity name + incorporation state (Bengaluru confirmed)
 - [ ] Founder equity structure
 - [ ] Domain / brand assets
 - [ ] First paid app feature (what users pay for)

@@ -75,7 +75,7 @@ models, (b) ship our first revenue app, and (c) move to Indian edge silicon.
 
 ## Application checklist
 - [ ] Verify TIDE 2.0 call window (Startup India portal, application id 5f300988e4b0703cc733e025)
-- [ ] Confirm incubator partner (51 TIDE incubators — pick nearest, likely Bihar/Patna or Bengaluru)
+- [ ] Confirm incubator partner (51 TIDE incubators — pick nearest, likely Bengaluru)
 - [ ] DPIIT / Startup India registration number (gates IndiaAI + SAMRIDH too)
 - [ ] Fill application form (startupindia.gov.in → AMS)
 - [ ] Attach: this dossier + one-pager + demo video link

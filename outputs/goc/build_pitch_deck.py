@@ -110,7 +110,7 @@ split_slide("Business Model",
         "TIDE 2.0 (MeitY) — up to ₹50L, dossier ready",
         "SISFS (DST) — up to ₹50L",
         "IndiaAI compute credits (40% off)",
-        "Bihar Startup Policy — Patna-based entity",
+        "Karnataka Startup/IT policy — Bengaluru-based entity",
     ])
 
 bullet_slide("Roadmap (12 months)", [
@@ -123,7 +123,7 @@ bullet_slide("Roadmap (12 months)", [
 bullet_slide("The Ask", [
     "TIDE 2.0: ₹50L — GPU compute, Indian-language data, product dev, team",
     "Compute: ~100–200 GPU-hours/month for LoRA + distillation",
-    "Incubator partner: 51 TIDE incubators — Bihar/Bengaluru",
+    "Incubator partner: 51 TIDE incubators — Bengaluru",
     "Demo video available on request",
 ])
 

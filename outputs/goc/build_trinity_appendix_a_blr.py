@@ -80,7 +80,7 @@ a("Project TRINITY is the vehicle for building India's complete sovereign AI sta
 num("Incorporation target: Q3 2026. Founder holds 100% initially. Headcount: 1 founder + 1–2 hires planned in MVP phase.")
 
 q("Q2. Who are the founders and core team?")
-a("Founder Saurabh Mandal — full-stack builder and AI system architect who built the entire from-scratch SIA stack (tokenizer, transformer, vision/audio/code encoders, diffusion heads, tool-calling, swarm scaffold) — ~2,000+ lines of original code — plus three prior products (ASTRO, ALICE, SIA). Domain coverage: model architecture, training, multimodal ML, product engineering, business planning, and the government-grant pipeline (TIDE 2.0, SISFS, IndiaAI, Bihar Startup Policy).")
+a("Founder Saurabh Mandal — full-stack builder and AI system architect who built the entire from-scratch SIA stack (tokenizer, transformer, vision/audio/code encoders, diffusion heads, tool-calling, swarm scaffold) — ~2,000+ lines of original code — plus three prior products (ASTRO, ALICE, SIA). Domain coverage: model architecture, training, multimodal ML, product engineering, business planning, and the government-grant pipeline (TIDE 2.0, SISFS, IndiaAI).")
 num("1 founder; hiring 1–2 junior engineers in year 1; ML + infra hires years 2–3.")
 
 q("Q3. What is the business model and how does the company create value?")

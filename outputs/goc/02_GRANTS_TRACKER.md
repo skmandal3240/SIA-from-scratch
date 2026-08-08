@@ -10,7 +10,6 @@ Status legend: 🔴 not started | 🟡 drafting | 🟢 applied | ✅ awarded
 | NIDHI-PRAYAS | DST | ₹10L | rolling | 🔴 | Early-stage prototyping |
 | SISFS (SISFS) | DST | up to ₹50L | annual | 🔴 | Seed support for startups |
 | DLI (Design Linked Incentive) | MeitY | ~50% design cost | rolling | 🔴 | For edge ASIC (yr 2) |
-| Bihar Startup Policy | Govt of Bihar | varies | annual | 🔴 | Patna-based entity |
 | PLI (Make in India) | DPIIT | varies | scheme | 🔴 | Hardware manufacturing |
 
 ## Actions this week
