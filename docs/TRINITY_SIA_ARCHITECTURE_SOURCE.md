@@ -75,6 +75,33 @@ India's 3-stage nuclear program (context to the energy thesis):
 4. **Agents/OS** → SIA Agent + SIA Studio/SDK + common runtime
 5. **Applications** → §1 apps (health, edu, agri, industry via embedded SDK)
 
+---
+
+## 6. The 5-Layer AI stack (strategic positioning diagram)
+
+Founder's hand-drawn pyramid — how TRINITY frames the whole stack:
+
+| Layer | Slice |
+|-------|-------|
+| L1 | **Claude Code / Codex** — coding agents at the top ("Cloud Code" + Codex) |
+| L2 | **Applications** — "All" (every industry app) |
+| L3 | **Models** — foundation + Fab 5 / small models |
+| L4 | **Infrastructure** — data centers (rent → own, per §3) |
+| L5 | **Chip** — silicon (CPU/GPU/TPU/NPU/photonic, per §4) + **Energy** (nuclear path, §5) |
+
+**Outcomes pointed at by the stack:**
+- **SIA Everywhere** — the model family (Nano → Cloud) embedded in every device
+- **Root India / Build India** — the sovereign outcome: IP, jobs, chips, energy in India
+
+**Bottom-of-page notes (upstream enablers):**
+- Nuclear (energy → L5)
+- Custom software / Customizing AI (L1–L2 moat)
+- Optical / photonic (future L4–L5)
+- LPU (possibly "LPU", language processing unit — Soft-wise)
+
+→ This is the one slide that tells the whole TRINITY story: **5 layers, one
+company, SIA as the operating system at every layer, India as the root.**
+
 ## Open decisions
 - [ ] Confirm "SIA Cloud" is a planned tier vs rented (Year 1–2 rent-first says rented)
 - [ ] 70B+ cloud tier training plan (₹₹₹ — grant/partner funded?)
