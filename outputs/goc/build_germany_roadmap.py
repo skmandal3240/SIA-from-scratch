@@ -44,8 +44,8 @@ def table(headers, rows):
 t = doc.add_paragraph(); t.alignment = WD_ALIGN_PARAGRAPH.CENTER
 r = t.add_run("GERMANY MSc AI/ML — ROADMAP\n"); r.bold = True; r.font.size = Pt(26); r.font.color.rgb = NAVY
 r = doc.add_paragraph("Masters in Computer Science (AI & ML) · Winter 2026 / Summer 2027\n"); r.alignment = WD_ALIGN_PARAGRAPH.CENTER; r.runs[0].font.size = Pt(13); r.runs[0].font.color.rgb = GOLD
-r = doc.add_paragraph("Saurabh Mandal · base: Virar, Maharashtra (sister's place) · Aug 2026\n"); r.alignment = WD_ALIGN_PARAGRAPH.CENTER; r.runs[0].font.size = Pt(10); r.runs[0].font.color.rgb = GREY
-note("Facts checked Aug 2026. Requirements change yearly — verify on DAAD.de, uni-assist, and APS India before submitting.")
+r = doc.add_paragraph("Saurabh Mandal · base: Virar, Maharashtra (sister's place) · 12 August 2026\n"); r.alignment = WD_ALIGN_PARAGRAPH.CENTER; r.runs[0].font.size = Pt(10); r.runs[0].font.color.rgb = GREY
+note("Facts checked 12 Aug 2026. Requirements change yearly — verify on DAAD.de, uni-assist, and APS India before submitting. TODAY = 12 Aug 2026.")
 
 # 1. Why Germany
 h1("1. Why Germany (cost vs UK)")
@@ -60,13 +60,14 @@ table(["Item", "UK (Greenwich)", "Germany (public uni)"],
 p("Bottom line: Germany costs roughly ONE UK tuition year, total. And the AI/ML field in Germany is hiring aggressively.")
 
 # 2. Two intake options
-h1("2. Intake Options")
-table(["Intake", "Timing", "German target", "Verdict"],
+h1("2. Intake Options (as of 12 Aug 2026)")
+table(["Intake", "Timing", "Status", "Verdict"],
 [
-    ("Winter 2026", "Oct 2026 — ~14 months away", "B1 (visa minimum)", "Tight but possible if APS + Goethe start NOW"),
-    ("Summer 2027", "Apr 2027 — ~20 months away", "B2 preferred", "Safest, recommended"),
+    ("Winter 2026", "Oct 2026 — 6 weeks away", "Application windows mostly closed; visa lead time 6–12 wks impossible", "❌ Effectively missed — do not chase"),
+    ("Summer 2027", "Apr 2027 — ~8 months away", "Applications open Sep–Nov 2026; deadlines Nov 2026–Jan 2027", "✅ THE realistic target"),
+    ("Winter 2027", "Oct 2027 — 14 months away", "Backup if Summer 2027 slips", "Plan B"),
 ])
-p("Recommendation: aim Summer 2027. Use the extra 6 months for B2 + savings + university list refinement.")
+p("Recommendation: Summer 2027 is now the primary goal. Winter 2026 is unrealistic (visa alone needs 6–12 weeks after admission). Everything below is dated for Summer 2027.")
 
 # 3. The 6 core requirements
 h1("3. Core Requirements")
@@ -94,13 +95,13 @@ table(["University", "Programme", "Notes"],
 note("Each has specific English/GPA bars — apply to 4–6, 2 reach + 2 fit + 2 safe.")
 
 # 5. German study plan (Virar base)
-h1("5. German Study Plan (Virar, Maharashtra)")
+h1("5. German Study Plan (Virar, Maharashtra — from Aug 2026)")
 table(["Milestone", "Target date", "How"],
 [
-    ("Goethe A1", "Dec 2026", "Online/Goethe Mumbai — ~3 months"),
-    ("Goethe A2", "Mar 2027", "Intensive course + daily practice"),
-    ("Goethe B1", "Jun 2027", "Exam — visa minimum"),
-    ("Goethe B2 (optional)", "Sep 2027", "Stronger employability"),
+    ("Goethe A1", "Dec 2026", "Online/Goethe Mumbai — ~3–4 months"),
+    ("Goethe A2", "Apr 2027", "Intensive course + daily practice"),
+    ("Goethe B1", "Jul 2027", "Exam — visa minimum (for Summer 2027 entry)"),
+    ("Goethe B2 (optional)", "Dec 2027", "Stronger employability / winter 2027 backup"),
 ])
 bullet("Daily: 1–2 hrs German (Duolingo + Goethe materials + German music/TV).")
 bullet("Mumbai Goethe-Institut is 1–1.5h from Virar — weekend classes possible.")
@@ -121,19 +122,21 @@ bullet("Funding routes: Indian job (Python/ML junior ₹4–12L/yr) + TIDE 2.0 g
 bullet("Blocked account can be built in ~12 months with a job (₹60–80k/month saving).")
 
 # 7. Timeline
-h1("7. Month-by-Month Plan (to Summer 2027)")
+h1("7. Month-by-Month Plan (12 Aug 2026 → Summer 2027)")
 table(["When", "Action"],
 [
-    ("Aug 2026", "Start APS application; open Goethe A1"),
-    ("Sep–Nov 2026", "A1 classes; start university shortlist; resume refresh"),
-    ("Dec 2026", "A1 exam; submit APS (if not yet)"),
-    ("Jan–Mar 2027", "A2 classes; uni applications open — apply 4–6 unis"),
-    ("Apr–Jun 2027", "B1 exam; admission letters; blocked account start"),
-    ("Jul–Aug 2027", "Visa appointment (German embassy); flights"),
-    ("Sep 2027", "Pre-departure; secure housing via uni dorms"),
-    ("Oct 2027", "Semester starts"),
+    ("Aug 2026 (NOW)", "Apply APS immediately; book Goethe A1; open blocked-account research"),
+    ("Sep–Oct 2026", "A1 classes; university shortlist final; watch summer-2027 portals open"),
+    ("Nov 2026", "A1 exam; submit uni applications (first deadlines Nov 2026–Jan 2027)"),
+    ("Dec 2026", "A2 starts; submit remaining applications"),
+    ("Jan–Feb 2027", "A2 exam; admission letters start arriving"),
+    ("Mar–Apr 2027", "B1 classes; accept admission; blocked account funding (€11,904)"),
+    ("May–Jun 2027", "B1 exam; visa appointment (German embassy)"),
+    ("Jul–Aug 2027", "Visa grant; flights; housing via uni dorms"),
+    ("Sep 2027", "Pre-departure; blocked account activated"),
+    ("Apr 2027 (intake)", "Summer semester starts — if all went well, this is the goal"),
 ])
-note("If Winter 2026 wanted: compress — APS now, A1 by Nov, apply unis by Dec–Feb, B1 by May, depart Sep 2026.")
+note("If Summer 2027 slips → Winter 2027 becomes Plan B with B2 completed by Dec 2027.")
 
 # 8. Keep SIA alive
 h1("8. Keep SIA Alive Through It All")
