@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Documents · SIA India Startup PoC{% endblock %}
+{% block content %}
+<section class="page-intro"><p class="eyebrow">Step 2 · Documents</p><h1>Track evidence without exposing identity data.</h1><p>The first PoC stores review flags only. It does not upload or retain Aadhaar, PAN, passport, or utility-bill bytes.</p></section>
+{% if saved %}<div class="callout success-box" role="status"><strong>Document checklist saved.</strong><p>Only status flags were recorded for this local demo.</p></div>{% endif %}
+<form method="post" class="panel form-section">
+  <div class="document-row"><div><strong>Founder identity/address proof metadata</strong><p>Record document type and review status with a professional. Never paste the number into this app.</p></div><label class="checkbox-row"><input type="checkbox" name="director_proofs_uploaded" value="true" {% if draft.director_proofs_uploaded %}checked{% endif %}> Mark reviewed</label></div>
+  <div class="document-row"><div><strong>Registered office proof and owner consent/NOC</strong><p>For the genuine Madhubani address. Keep the underlying file in an approved secure vault in a production system.</p></div><label class="checkbox-row"><input type="checkbox" name="office_proof_uploaded" value="true" {% if draft.office_proof_uploaded %}checked{% endif %}> Mark metadata recorded</label></div>
+  <div class="document-row"><div><strong>DSC plan and director consents</strong><p>Use the company profile page to record the DSC status; use professional review before signing any MCA document.</p></div><span class="pill">{{ draft.dsc_status|replace('_',' ')|title }}</span></div>
+  <div class="document-row"><div><strong>SPICe+ / MOA / AOA field map</strong><p>The export contains a structured field map and review gate, not final legal drafting.</p></div><span class="pill caution">Review required</span></div>
+  <div class="callout warning-box"><strong>Privacy boundary</strong><p>Do not use real identity numbers or scans in this PoC. A production build needs authentication, encryption, retention/deletion controls, access logs, and a formal privacy review.</p></div>
+  <div class="form-actions"><button class="button" type="submit">Save document statuses</button><a class="button secondary" href="{{ url_for('review') }}">Open review package</a></div>
+</form>
+{% endblock %}

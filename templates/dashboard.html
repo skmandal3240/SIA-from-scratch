@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Overview · SIA India Startup PoC{% endblock %}
+{% block content %}
+<section class="hero-grid">
+  <div>
+    <p class="eyebrow">Bihar-first founder workspace</p>
+    <h1>Turn an AI idea into a reviewable company plan.</h1>
+    <p class="lede">A practical starting point for a student founder in Madhubani: capture the Private Limited Company inputs, expose the real blockers, and prepare an evidence-backed route toward grants, incubators, and affordable compute.</p>
+    <div class="actions"><a class="button" href="{{ url_for('company') }}">Complete company profile</a><a class="button secondary" href="{{ url_for('review') }}">Open review package</a></div>
+  </div>
+  <aside class="hero-note"><span class="label">Current operating base</span><strong>{{ draft.district }}, {{ draft.state }}</strong><p>State selection follows your genuine operating base. The app does not encourage a paper-only address.</p></aside>
+</section>
+<section class="metric-grid" aria-label="Readiness summary">
+  <article class="metric-card"><span>Readiness status</span><strong class="status-{{ readiness.overall }}">{{ readiness.overall|replace('_',' ')|title }}</strong><small>{{ readiness.completion_percent }}% of tracked items complete</small></article>
+  <article class="metric-card"><span>Registration structure</span><strong>Private Limited</strong><small>Second member and director are explicit gates</small></article>
+  <article class="metric-card"><span>Support routes</span><strong>{{ matches|length }}</strong><small>Each result has a source and uncertainty label</small></article>
+  <article class="metric-card"><span>GPU plan</span><strong>{{ gpu.estimated_memory_gb }} GB</strong><small>Estimated memory need for the default PoC workload</small></article>
+</section>
+<section class="content-grid">
+  <div class="panel">
+    <div class="section-heading"><div><p class="eyebrow">What needs attention</p><h2>Next actions</h2></div><a href="{{ url_for('company') }}">Edit profile</a></div>
+    {% if readiness.issues %}
+      <ul class="issue-list">{% for issue in readiness.issues[:6] %}<li><span class="dot warning"></span>{{ issue }}</li>{% endfor %}</ul>
+    {% else %}<p class="success-copy">The basic profile is complete enough to move to professional review.</p>{% endif %}
+    {% if readiness.warnings %}<div class="callout warning-box"><strong>Review carefully</strong><p>{{ readiness.warnings[0] }}</p></div>{% endif %}
+  </div>
+  <div class="panel dark-panel"><p class="eyebrow">Funding reality check</p><h2>Grants are routes, not promises.</h2><p>Use DPIIT recognition as an enabling status, then match the product and stage to incubator-linked support. Bihar support, OBC-linked finance, and public GPU access are shown separately because they can have different terms.</p><a class="text-link" href="{{ url_for('support') }}">See support matches →</a></div>
+</section>
+<section class="panel"><div class="section-heading"><div><p class="eyebrow">Registration map</p><h2>From idea to review gate</h2></div><span class="muted">No filing or payment is performed</span></div><div class="timeline"><div><b>01</b><span><strong>Define</strong><small>Names, AI product, users, ownership</small></span></div><div><b>02</b><span><strong>Evidence</strong><small>Founder, director, and Madhubani office metadata</small></span></div><div><b>03</b><span><strong>Incorporate</strong><small>SPICe+ field map for professional review</small></span></div><div><b>04</b><span><strong>Build</strong><small>DPIIT, incubators, grants, compute</small></span></div></div></section>
+{% endblock %}

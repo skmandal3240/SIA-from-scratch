@@ -23,7 +23,7 @@ Road ahead = **Jevons paradox**: as AI gets cheaper, usage explodes — so cost-
 |---|--------|-------------|-------------------|
 | 5 | Energy | Nuclear criticality (PFBR) | PFBR Kalpakkam 500 MWe first criticality 6 Apr 2026 (indigenous, BHAVINI/DAE). Nuclear Mission: 100 GW by 2047. Bharat Small Reactors (220 MWe) opening to private sector |
 | 4 | Hardware | Tata silicon + LPU/optical + custom software | Tata-PSMC Dholera 28nm fab: trial production Dec 2026, ~50K wafers/mo by 2028. Tata OSAT Assam. India Semiconductor Mission ₹76,000 Cr |
-| 3 | Infrastructure | Rent Indian govt/company compute | IndiaAI Mission: 38,000+ GPUs deployed; startups get up to 40% off → ₹65–92/hr (H100 on-demand ~₹217/hr, spot ~₹70/hr). Empaneled: Jio, Yotta, E2E (MeitY GI Cloud), Tata Comms, C-DAC PARAM. Portal: compute.indiaai.gov.in |
+| 3 | Infrastructure | Rent Indian govt/company compute | IndiaAI Compute and C-DAC/AIRAWAT are potential routes; current GPU inventory, eligibility, allocation, providers, and prices must be verified from official portals at application time. |
 | 2 | Models | SIA Edge AI everywhere (drones, cameras, networks) | SIA-from-scratch transformer core in progress (/root/SIA-from-scratch) |
 | 1 | Applications | Revenue → funds all R&D | None yet — this is the engine |
 
@@ -64,10 +64,10 @@ Road ahead = **Jevons paradox**: as AI gets cheaper, usage explodes — so cost-
 
 ## PILLAR 3 — INFRASTRUCTURE (rent Indian, build later)
 
-**Fact base:** IndiaAI compute portal live with price calculator; eligible startups up to 40% reduced cost. Empaneled providers incl. Jio, Yotta, E2E Networks (MeitY GI Cloud), Tata Communications, C-DAC PARAM.
+**Verification rule:** IndiaAI Compute and C-DAC/AIRAWAT may offer public or subsidised access, but eligibility, allocation, providers, capacity, and prices are time-sensitive. Use the registration PoC’s source-backed planner and verify the official portal before acting.
 
 **Step by step:**
-1. **Week 1:** apply on the IndiaAI compute portal (needs DPIIT/Startup India recognition — check our registration). Get subsidised GPU ₹/hr. Apply in parallel for MeitY/IndiaAI compute credits + SAMRIDH / TIDE 2.0 grants.
+1. **Week 1:** prepare a small benchmark and workload dossier, then verify IndiaAI Compute, C-DAC/AIRAWAT, incubator, and university routes. Apply only where the current eligibility and call fit; do not assume DPIIT recognition, a discount, or compute allocation.
 2. **Month 1–12:** run ALL training on rented Indian GPU (Jio / Yotta / E2E). Keep workloads portable: K8s/Slurm + containerised training so switching provider = config change.
 3. **Month 12–24:** when GPU spend exceeds ~₹10–15L/month sustained, colocate racks (CtrlS / Yotta / NxtGen) instead of building. Stay in India for DPDP Act data residency — it's a selling point.
 4. **Own DC trigger:** revenue covers 100% of capex, or a grant is secured. Then build greenfield DC near cheap power (Pillar 5) with our ASIC inference racks (Pillar 4).
@@ -125,8 +125,8 @@ Multimodal in stages: text → vision → audio → video/code.
 
 | Item | Cost | When |
 |------|------|------|
-| IndiaAI subsidised GPU | ₹65–92/hr | now |
-| SIA-pro LoRA fine-tune | ~₹20–60K (100–200 GPU-hrs) | mo 3 |
+| IndiaAI public/discounted compute | Verify current portal terms | now, subject to allocation |
+| SIA-pro LoRA fine-tune | Estimate from verified route and actual workload | mo 3 |
 | SIA-edge quantise + deploy | ₹2–5L (devkits) | mo 6–12 |
 | Edge ASIC design + FPGA | ₹40–80L (DLI covers ~50%) | yr 2 |
 | 28nm tape-out with Tata | ₹15–30 Cr (shared w/ partners) | yr 2–3 |
@@ -137,8 +137,8 @@ Multimodal in stages: text → vision → audio → video/code.
 
 ## FIRST 7 DAYS
 
-1. Apply on IndiaAI compute portal (need DPIIT/Startup India number — confirm registration status).
-2. Apply SAMRIDH / TIDE 2.0 / IndiaAI grants (track deadlines).
+1. Prepare and verify an IndiaAI/C-DAC/incubator compute application using the registration PoC’s workload planner; confirm current eligibility and allocation rules.
+2. Review Bihar Startup Policy, SISFS, TIDE 2.0, NIDHI-linked, and later-stage accelerator routes; classify each as grant, loan, equity, incubator support, or in-kind compute and track current calls.
 3. Ship SIA transformer core smoke test (on track).
 4. List 20 candidate app #1 customers; call 5.
 5. Draft intro emails: Tata Electronics innovation team + InCore.

@@ -28,4 +28,6 @@ Thumbs.db
 
 # Logs
 *.log
-wandb/
+wandb/.poc_state/
+__pycache__/
+.pytest_cache/

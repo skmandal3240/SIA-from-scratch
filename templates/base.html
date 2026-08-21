@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}SIA India Startup PoC{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='poc.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">S</span><div><strong>SIA India Startup PoC</strong><small>Registration readiness workspace</small></div></div>
+    <nav aria-label="Primary navigation">
+      <a href="{{ url_for('dashboard') }}">Overview</a>
+      <a href="{{ url_for('company') }}">Company setup</a>
+      <a href="{{ url_for('documents') }}">Documents</a>
+      <a href="{{ url_for('support') }}">Support finder</a>
+      <a href="{{ url_for('gpu') }}">GPU planner</a>
+      <a class="nav-strong" href="{{ url_for('review') }}">Review &amp; export</a>
+    </nav>
+  </header>
+  <main class="page-shell">
+    <div class="demo-banner"><strong>Local PoC:</strong> this app prepares drafts and checklists only. It does not file MCA forms, sign documents, process payments, or guarantee grants/GPU access.</div>
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer"><span>Source verification date: {{ verified_on }}</span><span>Professional review required before filing or applying.</span></footer>
+</body>
+</html>

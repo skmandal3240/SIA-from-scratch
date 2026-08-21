@@ -42,3 +42,17 @@ text ✅ → vision (encoder done, VAE decoders next) → audio listen ✅ / gen
 ## GoC / Grants
 
 See `outputs/goc/`: `01_SIA_5_PILLAR_ONEPAGER.md`, `02_GRANTS_TRACKER.md`, `03_EMAIL_DRAFTS.md`, `SIA_5_Pillar_Plan.pptx` (9 slides, rebuild with `outputs/goc/build_pptx.py`). Daily digest cron → Telegram 02:30 UTC.
+
+## India company-registration and funding PoC
+
+The repository now includes a local Flask proof of concept for a student-founded AI Private Limited Company with a genuine operating base in Madhubani, Bihar. It provides a registration-readiness workspace, explicit second-member/second-director gates, safe document-status tracking, source-backed support matching, an affordable-GPU workload planner, and a JSON review export. It does not file MCA forms, sign documents, process payments, or guarantee grants or compute access.
+
+```bash
+python3 -m pip install -r requirements.txt
+python3 poc_app.py
+# open http://127.0.0.1:5000/
+
+PYTHONPATH=. python3 -m unittest discover -s tests -v
+```
+
+Read `docs/REGISTRATION_POC.md` for the workflow, privacy boundaries, source-maintenance rules, and professional-review gate. The local demo draft is stored in `.poc_state/` and ignored by Git.

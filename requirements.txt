@@ -4,3 +4,4 @@ einops>=0.8
 huggingface-hub>=0.23
 safetensors>=0.4
 accelerate>=0.30
+flask>=3.0

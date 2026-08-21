@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Support finder · SIA India Startup PoC{% endblock %}
+{% block content %}
+<section class="page-intro"><p class="eyebrow">Step 3 · Support finder</p><h1>Find the right route, not just a big number.</h1><p>Results are conservative and source-backed. “Conditional” means the route may fit but still needs a current call, incubator, document, or eligibility check.</p></section>
+<div class="filter-note"><strong>Profile used:</strong> {{ draft.state }}, {{ draft.district }} · {{ draft.founder_status|title }} · {{ draft.social_category }} · AI/technology · {{ draft.incorporation_stage|replace('_',' ')|title }}</div>
+<section class="support-list">
+{% for program in matches %}<article class="panel support-card"><div class="support-top"><div><p class="eyebrow">{{ program.owner }}</p><h2>{{ program.name }}</h2></div><span class="status-badge status-{{ program.status }}">{{ program.status|replace('_',' ')|title }}</span></div><div class="support-meta"><span><b>Type</b>{{ program.support_type|replace('_',' ')|title }}</span><span><b>Stage</b>{{ program.stage|title }}</span><span><b>Geography</b>{{ program.geography }}</span><span><b>Confidence</b>{{ program.confidence }}</span></div><p>{{ program.note }}</p><div class="support-columns"><div><strong>Why it may fit</strong><ul>{% for reason in program.reasons %}<li>{{ reason }}</li>{% endfor %}</ul></div><div><strong>Missing or conditional</strong>{% if program.missing %}<ul>{% for missing in program.missing %}<li>{{ missing }}</li>{% endfor %}</ul>{% else %}<p class="success-copy">No additional profile gap was inferred; verify the current call anyway.</p>{% endif %}</div></div><a class="text-link" href="{{ sources[program.source].url }}" target="_blank" rel="noreferrer">Open official source: {{ sources[program.source].label }} ↗</a></article>{% endfor %}
+</section>
+<div class="callout info-box"><strong>OBC and student status</strong><p>They remain profile filters. This workspace does not infer a grant entitlement unless the official scheme explicitly recognizes the category and the current call accepts the company’s stage.</p></div>
+{% endblock %}
